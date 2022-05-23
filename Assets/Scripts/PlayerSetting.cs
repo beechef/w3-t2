@@ -1,16 +1,10 @@
 using UnityEngine;
-using UnityEngine.UI;
 using Newtonsoft.Json;
 
 public class PlayerSetting : MonoBehaviour
 {
+    private const string SETTING = "SETTING";
     public static PlayerSetting Instance { get; private set; }
-
-    public Slider sound;
-    public Slider music;
-    public Dropdown graphic;
-    public Dropdown language;
-
     private SettingData _settingData;
 
     private void Awake()
@@ -27,44 +21,48 @@ public class PlayerSetting : MonoBehaviour
 
     private void LoadData()
     {
-        _settingData = JsonConvert.DeserializeObject<SettingData>(PlayerPrefs.GetString("setting"));
-        if (_settingData != null)
-        {
-            sound.value = _settingData.sound;
-            music.value = _settingData.music;
-            graphic.value = _settingData.graphic;
-            language.value = _settingData.language;
-        }
-        else
-        {
-            _settingData = new SettingData();
-        }
+        _settingData = JsonConvert.DeserializeObject<SettingData>(PlayerPrefs.GetString(SETTING)) ?? new SettingData();
     }
 
     private void SaveData()
     {
-        PlayerPrefs.SetString("setting", JsonConvert.SerializeObject(_settingData));
+        PlayerPrefs.SetString(SETTING, JsonConvert.SerializeObject(_settingData));
     }
 
+    public float GetSound()
+    {
+        return _settingData.Sound;
+    }
     public void SetSound(float sound)
     {
-        _settingData.sound = sound;
+        _settingData.Sound = sound;
         SaveData();
+    }
+    public float GetMusic()
+    {
+        return _settingData.Music;
     }
     public void SetMusic(float music)
     {
-        _settingData.music = music;
+        _settingData.Music = music;
         SaveData();
     }
-
+    public int GetGraphic()
+    {
+        return _settingData.Graphic;
+    }
     public void SetGraphic(int graphic)
     {
-        _settingData.graphic = graphic;
+        _settingData.Graphic = graphic;
         SaveData();
+    }
+    public int GetLanguage()
+    {
+        return _settingData.Language;
     }
     public void SetLanguage(int language)
     {
-        _settingData.language = language;
+        _settingData.Language = language;
         SaveData();
     }
 }
